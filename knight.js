@@ -31,7 +31,7 @@ const ChessSquare = (x, y) => {
 
   const newSquareFrom = (xOffset, yOffset) => {
     const [newX, newY] = [xPos + xOffset, yPos + yOffset];
-    if (0 <= newX && newX < 8 && 0 <= newY && y < 8) {
+    if (0 <= newX && newX < 8 && 0 <= newY && newY < 8) {
       return ChessSquare(newX, newY);
     }
   };
