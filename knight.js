@@ -24,9 +24,9 @@ const ChessSquare = (x, y) => {
   const name = () => `${x}, ${y}`;
 
   const createKnightMoves = () => {
-    return KNIGHT_OFFSETS.map((offset) =>
-      newSquareFrom(offset[0], offset[1])
-    ).filter((square) => square !== undefined);
+    return moves
+      .map((offset) => newSquareFrom(offset[0], offset[1]))
+      .filter((square) => square !== undefined);
   };
 
   const newSquareFrom = (xOffset, yOffset) => {
@@ -46,5 +46,25 @@ const ChessSquare = (x, y) => {
 };
 
 function knightMoves(start, finish) {
-  //do something...
+  squareRegistry.clear();
+
+  const origin = ChessSquare(...start);
+  const target = ChessSquare(...finish);
+
+  const queue = [origin];
+  while (!queue.includes(target)) {
+    const currentSquare = queue.shift();
+    const enqueueList = currentSquare.createKnightMoves();
+    enqueueList.forEach((square) => square.setPredecessor(currentSquare));
+    queue.push(...enqueueList);
+  }
+  const path = [target];
+  while (!path.includes(origin)) {
+    const prevSquare = path[0].getPredecessor();
+    path.unshift(prevSquare);
+  }
+
+  console.log(`The shortest path was ${path.length - 1} moves!`);
+  console.log("The moves were:");
+  path.forEach((square) => console.log(square.name()));
 }
